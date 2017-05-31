@@ -13,6 +13,7 @@ public class Run {
 		
 		//MAIN
 		Setup(deck,flusterDeck);
+		Deal(deck, player1, player2, player3, player4);
 		System.out.println();
 		
 	}
@@ -35,6 +36,7 @@ public class Run {
 		Shuffle(flusterDeck);
 	}
 	
+	//SHUFFLE
 	public static void Shuffle(Object[] deck){
 		Random rnd=new Random();
 		for (int x=0;x<deck.length;x++){
@@ -42,6 +44,16 @@ public class Run {
 			Object t=deck[x];
 			deck[x]=deck[temp];
 			deck[temp]=t;
+		}
+	}
+	
+	//DEAL
+	public static void Deal(Card[] deck, Card[] p1, Card[] p2,Card[] p3, Card[] p4){
+		for (int x=0;x<5;x++){
+			p1[x]=deck[x*4];
+			p2[x]=deck[x*4+1];
+			p3[x]=deck[x*4+2];
+			p4[x]=deck[x*4+3];
 		}
 	}
 }
