@@ -10,11 +10,21 @@ public class Run {
 		Card[] player2=new Card[5];
 		Card[] player3=new Card[5];
 		Card[] player4=new Card[5];
+		Scanner in=new Scanner(System.in);
 		
 		//MAIN
 		Setup(deck,flusterDeck);
 		Deal(deck, player1, player2, player3, player4);
-		System.out.println();
+		System.out.println("Your cards are: ");
+		for (int x=0;x<player1.length;x++){
+			System.out.println("Card "+(x+1)+": "+player1[x].getValue()+" of "+player1[x].getSuit());
+		}
+		int choice;
+		do{
+			System.out.print("Which card do you want to play?");
+			choice=in.nextInt();
+		}while(choice<1||choice>5);
+		System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
 		
 	}
 	//HELPER METHODS
