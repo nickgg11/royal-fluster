@@ -11,34 +11,56 @@ public class Run {
 		Card[] player2=new Card[5];
 		Card[] player3=new Card[5];
 		Card[] player4=new Card[5];
+		Card tempCard = deck[1];
+		int startCard=0;
 		Scanner in=new Scanner(System.in);
-		
 		//MAIN
 		Setup(deck,flusterDeck);
-		Deal(deck, player1, player2, player3, player4, discard);
+		Deal(deck, player1, player2, player3, player4, startCard);
+		discard[startCard]=deck[startCard];
 		System.out.println("Your cards are: ");
 		for (int x=0;x<player1.length;x++){
 			System.out.println("Card "+(x+1)+": "+player1[x].getValue()+" of "+player1[x].getSuit());
 		}
-		int choice;
+		int choice = 0;
 		do{
-			System.out.print("Which card do you want to play?");
-			choice=in.nextInt();
+			int y=0;
+			System.out.println("the card on the top of the discard pile is: "+discard[y].getValue()+" of "+discard[y].getSuit());
+			y++;
+			System.out.println("Would you like to draw from the discard pile or from the deck");
+			System.out.println("1: Deck\n2: Discard pile");
+			int drawChoice=in.nextInt();
+			if (drawChoice==1)
+			{
+				int x = 21;
+				x++;
+				System.out.println("The card drawn is "+deck[x].getValue()+" of "+deck[x].getSuit());
+				System.out.println("Do you want to\nDiscard this card: 1\nkeep this card and discard the one you chose: 2");
+				int cardChoice = in.nextInt();
+				if (cardChoice==2)
+				{
+					tempCard=discard[y];
+					System.out.println("Card #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
+					choice = in.nextInt();
+					System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
+					player1[choice-1]=tempCard;
+					for (int q=0;x<player1.length;q++){
+						System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
+					}
+				}
+				else
+				{
+					x=0;
+					tempCard = discard[x+1];
+					x++;
+					System.out.println();
+				}
+			}
 		}while(choice<1||choice>5);
-		System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
-		
-		System.out.println("Okay would like to draw from the discard pile or from the deck");
-		System.out.println("the card on the top of the discard pile is: "+discard);
-		System.out.println("1: Deck\n2: Discard pile");
-		int drawChoice=in.nextInt();
-		if (drawChoice==1)
-		{
-			System.out.println("The card drawn is");
-			System.out.println("Do you want to\nDiscard this card: 1\nkeep this card and discard another: 2");
-		}
-		Card tempCard = player1[choice];
+
+
 	}
-	
+
 	//HELPER METHODS
 
 	//SETUP
@@ -57,7 +79,7 @@ public class Run {
 		}
 		Shuffle(flusterDeck);
 	}
-	
+
 	//SHUFFLE
 	public static void Shuffle(Object[] deck){
 		Random rnd=new Random();
@@ -68,15 +90,14 @@ public class Run {
 			deck[temp]=t;
 		}
 	}
-	
+
 	//DEAL
-	public static void Deal(Card[] deck, Card[] p1, Card[] p2,Card[] p3, Card[] p4, Card[] discard){
+	public static void Deal(Card[] deck, Card[] p1, Card[] p2,Card[] p3, Card[] p4, int startCard){
 		for (int x=0;x<5;x++){
 			p1[x]=deck[x*4];
 			p2[x]=deck[x*4+1];
 			p3[x]=deck[x*4+2];
 			p4[x]=deck[x*4+3];
 		}
-		discard[0]=deck[24];
 	}
 }
