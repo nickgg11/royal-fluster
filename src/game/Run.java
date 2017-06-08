@@ -2,6 +2,7 @@ package game;
 import java.util.*;
 public class Run {
 	public static int deckPos=0;
+	public static Map<Character, Integer> map = new LinkedHashMap<Character, Integer>();
 	public static int discardPos=0;
 	public static void main(String[] args) {
 		//VARIABLES
@@ -12,13 +13,30 @@ public class Run {
 		Card[] player2=new Card[5];
 		Card[] player3=new Card[5];
 		Card[] player4=new Card[5];
-		Card tempCard = deck[1];
-		boolean win=false;
+		Card tempCard = deck[0];
+		boolean winp1=false;
+		boolean winp2=false;
+		boolean winp3=false;
+		boolean winp4=false;
 		Scanner in=new Scanner(System.in);
 		//MAIN
 		Setup(deck,flusterDeck);
-		Deal(deck, player1, player2, player3, player4, deckPos);
-		deckPos++;
+		System.out.println("How many players do you want to play with");
+		System.out.println("Two Players: 1\nThree Players: 2\nFour Players: 3");
+		int numP = in.nextInt();
+		in.nextLine();
+		if (numP==1)
+		{
+			Deal2(deck,player1, player2, deckPos);
+		}
+		if (numP==2)
+		{
+			Deal3(deck, player1, player2, player3, deckPos);
+		}
+		if (numP==3)
+		{
+			Deal4(deck, player1, player2, player3, player4, deckPos);
+		}
 		discard[discardPos]=deck[deckPos];
 		System.out.println("Your cards are: ");
 		for (int x=0;x<player1.length;x++){
@@ -26,6 +44,7 @@ public class Run {
 		}
 		int choice = 0;
 		do{
+			deckPos++;
 			System.out.println("the card on the top of the discard pile is: "+discard[discardPos].getValue()+" of "+discard[discardPos].getSuit());
 			System.out.println("Would you like to draw from the discard pile or from the deck");
 			System.out.println("1: Deck\n2: Discard pile");
@@ -42,6 +61,7 @@ public class Run {
 					choice = in.nextInt();
 					System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
 					player1[choice-1]=tempCard;
+					discardPos++;
 
 					for (int q=0;q<player1.length;q++){
 						System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
@@ -51,61 +71,95 @@ public class Run {
 				{
 					discard[discardPos+1]=tempCard;
 				}
-
-				else if(drawChoice==2)
-				{
-					System.out.println("Please select a card to replace");
-					System.out.println("Card #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
-					choice = in.nextInt();
-					tempCard=discard[discardPos];
-					System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
-					player1[choice-1]=tempCard;
-					for (int q=0;q<player1.length;q++){
-						System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
-					}
+			}
+			else if(drawChoice==2)
+			{
+				System.out.println("Please select a card to replace");
+				System.out.println("Card #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
+				choice = in.nextInt();
+				tempCard=discard[discardPos];
+				System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
+				player1[choice-1]=tempCard;
+				discardPos++;
+				for (int q=0;q<player1.length;q++){
+					System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
 				}
 			}
-			while(win==false);
-			}
-
-			//HELPER METHODS
-
-			//SETUP
-			public static void Setup(Card[] deck, Fluster[] flusterDeck){
-				String values[]={"10","J","Q","K","A"};
-				String suits[] ={"Spades","Hearts","Clubs","Diamonds","Spades","Hearts","Clubs","Diamonds"};
-				for (int x=0;x<values.length;x++){
-					for (int y=0;y<suits.length;y++){
-						deck[x*8+y]=new Card(values[x],suits[y]);
-					}
-				}
+			if (deckPos==40)
+			{
 				Shuffle(deck);
-				String types[]={"Go Again","Go Again", "Go Again", "Go Again Twice", "Go Again Twice", "Look and Take", "Look and Take", "Take", "Take", "Ask", "Ask", "Dig", "Royal Fluster"};
-				for (int x=0;x<types.length;x++){
-					flusterDeck[x]=new Fluster(types[x]);
-				}
-				Shuffle(flusterDeck);
+				deckPos=0;
 			}
 
-			//SHUFFLE
-			public static void Shuffle(Object[] deck){
-				Random rnd=new Random();
-				for (int x=0;x<deck.length;x++){
-					int temp=rnd.nextInt(deck.length);
-					Object t=deck[x];
-					deck[x]=deck[temp];
-					deck[temp]=t;
-				}
-			}
+		}
+		while(winp1==false && winp2==false && winp3==false && winp4==false);
+	}
 
-			//DEAL
-			public static void Deal(Card[] deck, Card[] p1, Card[] p2,Card[] p3, Card[] p4, int startCard){
-				for (int x=0;x<5;x++){
-					p1[x]=deck[x*4];
-					p2[x]=deck[x*4+1];
-					p3[x]=deck[x*4+2];
-					p4[x]=deck[x*4+3];
-					deckPos+=4;
-				}
+	//HELPER METHODS
+
+	//SETUP
+	public static void Setup(Card[] deck, Fluster[] flusterDeck){
+		String values[]={"10","J","Q","K","A"};
+		String suits[] ={"S","H","C","D","S","H","C","D"};
+		for (int x=0;x<values.length;x++){
+			for (int y=0;y<suits.length;y++){
+				deck[x*8+y]=new Card(values[x],suits[y]);
 			}
 		}
+		Shuffle(deck);
+		String types[]={"Go Again","Go Again", "Go Again", "Go Again Twice", "Go Again Twice", "Look and Take", "Look and Take", "Take", "Take", "Ask", "Ask", "Dig", "Royal Fluster"};
+		for (int x=0;x<types.length;x++){
+			flusterDeck[x]=new Fluster(types[x]);
+		}
+		Shuffle(flusterDeck);
+	}
+
+	//SHUFFLE
+	public static void Shuffle(Object[] deck){
+		Random rnd=new Random();
+		for (int x=0;x<deck.length;x++){
+			int temp=rnd.nextInt(deck.length);
+			Object t=deck[x];
+			deck[x]=deck[temp];
+			deck[temp]=t;
+		}
+	}
+
+	//DEAL
+	public static void Deal2(Card[] deck, Card[] p1, Card[] p2, int startCard)
+	{
+		for (int x=0;x<5;x++){
+			p1[x]=deck[x*4];
+			p2[x]=deck[x*4+1];
+			deckPos+=2;
+		}
+	}
+	public static void Deal3(Card[] deck, Card[] p1, Card[] p2,Card[] p3,  int startCard)
+	{
+		for (int x=0;x<5;x++){
+			p1[x]=deck[x*4];
+			p2[x]=deck[x*4+1];
+			p3[x]=deck[x*4+2];
+			deckPos+=3;
+		}
+	}
+	public static void Deal4(Card[] deck, Card[] p1, Card[] p2,Card[] p3, Card[] p4, int startCard)
+	{
+		for (int x=0;x<5;x++){
+			p1[x]=deck[x*4];
+			p2[x]=deck[x*4+1];
+			p3[x]=deck[x*4+2];
+			p4[x]=deck[x*4+3];
+			deckPos+=4;
+		}
+	}
+	public static void winp1 (Card[] p1)
+	{
+		for (int x=0;x<5;x++)
+		{
+
+			String suit=p1[0].getSuit();
+			if (p1[1].getSuit()==suit&&p1[2].getSuit()==suit&&p1[3].getSuit()==suit&&p1[4].getSuit()==suit);
+		}
+	}
+}
