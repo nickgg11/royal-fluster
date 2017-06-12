@@ -2,7 +2,7 @@ package game;
 import java.util.*;
 public class Run {
 	public static int deckPos=0;
-	public static Map<Character, Integer> map = new LinkedHashMap<Character, Integer>();
+	public static Map<String, Integer> map = new HashMap<String, Integer>();
 	public static int discardPos=0;
 	public static void main(String[] args) {
 		//VARIABLES
@@ -21,6 +21,7 @@ public class Run {
 		Scanner in=new Scanner(System.in);
 		//MAIN
 		Setup(deck,flusterDeck);
+		populateMap();
 		System.out.println("How many players do you want to play with");
 		System.out.println("Two Players: 1\nThree Players: 2\nFour Players: 3");
 		int numP = in.nextInt();
@@ -38,6 +39,7 @@ public class Run {
 			Deal4(deck, player1, player2, player3, player4, deckPos);
 		}
 		discard[discardPos]=deck[deckPos];
+		sortHand(player1);
 		System.out.println("Your cards are: ");
 		for (int x=0;x<player1.length;x++){
 			System.out.println("Card "+(x+1)+": "+player1[x].getValue()+" of "+player1[x].getSuit());
@@ -60,9 +62,9 @@ public class Run {
 					System.out.println("Card #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
 					choice = in.nextInt();
 					System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
+					Card discardTemp = player1[choice-1];
 					player1[choice-1]=tempCard;
-					discardPos++;
-
+					discard[discardPos]=discardTemp;
 					for (int q=0;q<player1.length;q++){
 						System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
 					}
@@ -90,9 +92,11 @@ public class Run {
 				Shuffle(deck);
 				deckPos=0;
 			}
-
+			winChecker(player1,winp1);
 		}
 		while(winp1==false && winp2==false && winp3==false && winp4==false);
+
+		in.close();
 	}
 
 	//HELPER METHODS
@@ -100,7 +104,7 @@ public class Run {
 	//SETUP
 	public static void Setup(Card[] deck, Fluster[] flusterDeck){
 		String values[]={"10","J","Q","K","A"};
-		String suits[] ={"S","H","C","D","S","H","C","D"};
+		String suits[] ={"Spade","Heart","Club","Diamond","Spade","Heart","Club","Diamond"};
 		for (int x=0;x<values.length;x++){
 			for (int y=0;y<suits.length;y++){
 				deck[x*8+y]=new Card(values[x],suits[y]);
@@ -153,13 +157,38 @@ public class Run {
 			deckPos+=4;
 		}
 	}
-	public static void winp1 (Card[] p1)
+	//Sort Hand
+	public static void populateMap ()
 	{
-		for (int x=0;x<5;x++)
+		map.put("A", 5);
+		map.put("K", 4);
+		map.put("Q", 3);
+		map.put("J", 2);
+		map.put("10", 1);
+	}
+	public static void sortHand (Card[] player1)
+	{
+		for (int y=0;y<player1.length;y++){
+		for (int x=0;x<player1.length-1;x++)
 		{
-
-			String suit=p1[0].getSuit();
-			if (p1[1].getSuit()==suit&&p1[2].getSuit()==suit&&p1[3].getSuit()==suit&&p1[4].getSuit()==suit);
+			int temp1 = map.get( player1[x].getValue());
+			int temp2 = map.get( player1[x+1].getValue());
+			if(temp1>temp2)
+			{
+				Card cardTemp = player1[x];
+				player1[x] = player1[x+1];
+				player1[x+1] = cardTemp;	
+			}
+		}
 		}
 	}
-}
+	public static void winChecker (Card[] p1, boolean winp1)
+	{
+			String suit=p1[0].getSuit();
+			if (p1[1].getSuit()==suit&&p1[2].getSuit()==suit&&p1[3].getSuit()==suit&&p1[4].getSuit()==suit&&p1[0].getValue()=="10"&&p1[0].getValue()=="J"&&p1[0].getValue()=="Q"&&p1[0].getValue()=="K"&&p1[0].getValue()=="A")
+			{
+			winp1=true;
+			}
+			
+		}
+	}
