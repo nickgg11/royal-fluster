@@ -71,7 +71,6 @@ public class Run {
 				else
 				{
 					discard[discardPos+1]=tempCard;
-					flusterCheck = discard[discardPos+1];
 				}
 			}
 			else if(drawChoice==2)
@@ -82,11 +81,10 @@ public class Run {
 				tempCard=discard[discardPos];
 				System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
 				discard[discardPos] = player1[choice-1];
-				flusterCheck=discard[discardPos];
 				player1[choice-1]=tempCard;
 				for (int q=0;q<player1.length;q++){
 					System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
-				
+
 				}
 			}
 			if (deckPos==40)
@@ -95,7 +93,7 @@ public class Run {
 				deckPos=0;
 			}
 			winChecker(player1, winp1, player2, winp2, player3, winp3, player4, winp4);
-			if (discard[discardPos]=='A')
+			if (discard[discardPos].getValue().equals("A"))
 			{
 				int x=0;
 				if(x==14)
@@ -105,12 +103,12 @@ public class Run {
 				System.out.println("The card drawn is "+flusterDeck[x].getType());
 				if (flusterDeck[x].getType()=="Go Again")
 				{
-					play( player1, discard, choice, tempCard, Card[] deck, int deckPos, int discardPos, boolean winp1, Card[] player2, boolean winp2, Card[] player3, boolean winp3, Card[] player4, boolean winp4);
+					play( player1, discard, choice, tempCard,  deck, deckPos, discardPos, winp1, player2, winp2, player3, winp3, player4, winp4);
 				}
 				else if (flusterDeck[x].getType()=="Go Again Twice")
 				{
-					play(Card[] player1, Card[] discard, int choice, Card tempCard, Card[] deck, int deckPos, int discardPos, boolean winp1, Card[] player2, boolean winp2, Card[] player3, boolean winp3, Card[] player4, boolean winp4);	
-					play(Card[] player1, Card[] discard, int choice, Card tempCard, Card[] deck, int deckPos, int discardPos, boolean winp1, Card[] player2, boolean winp2, Card[] player3, boolean winp3, Card[] player4, boolean winp4);	
+					play( player1,  discard,  choice, tempCard, deck, deckPos, discardPos,  winp1,  player2,  winp2,  player3,  winp3,  player4,  winp4);	
+					play( player1,  discard,  choice, tempCard,  deck,  deckPos,  discardPos,  winp1,  player2,  winp2,  player3,  winp3,  player4,  winp4);	
 				}
 				else if (flusterDeck[x].getType()=="look and Take")
 				{
@@ -120,24 +118,43 @@ public class Run {
 					in.nextLine();
 					if (choice==1)
 					{
-						for (int x=0;x<player1.length;x++){
+						for (int k=0;k<player1.length;k++)
+						{
 							System.out.println("Card "+(x+1)+": "+player2[x].getValue()+" of "+player2[x].getSuit());
-							System.out.println("Pick a card you want\nCard #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
-							choice = in.nextInt();
-							tempCard = player2[choice-1];
-							System.out.println("What card will you replace\nCard #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
-							choice = in.nextInt();
-							player2[choice-1]=player1[choice-1];
-							player1[choice-1] = tempCard;
-							
 						}
+						System.out.println("Pick a card you want\nCard #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
+						choice = in.nextInt();
+						tempCard = player2[choice-1];
+						System.out.println("What card will you replace\nCard #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
+						choice = in.nextInt();
+						player2[choice-1]=player1[choice-1];
+						player1[choice-1] = tempCard;
+
 					}
-						
 				}
-				x++
-				for (int q=0;q<player1.length;q++){
-					System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
+				else if (flusterDeck[x].getType()==("Take"))
+				{
+					System.out.println("Pick a card you want\nCard #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
+					choice = in.nextInt();
+					tempCard = player2[choice-1];
+					System.out.println("What card will you replace\nCard #1: 1\nCard #2: 2\nCard #3: 3\nCard #4: 4\nCard #5: 5");
+					choice = in.nextInt();
+					player2[choice-1]=player1[choice-1];
+					player1[choice-1] = tempCard;
 				}
+				else if (flusterDeck[x].getType()=="Ask")
+				{
+					System.out.println("Okay ask for a Suit");
+					String suitChoice;
+				suitChoice = in.nextLine();
+				
+				p1[1].getSuit()==suit&&p1[2].getSuit()==suit&&p1[3].getSuit()==suit&&p1[4].getSuit()==suit
+				}
+
+				x++;
+			}
+			for (int q=0;q<player1.length;q++){
+				System.out.println("Card "+(q+1)+": "+player1[q].getValue()+" of "+player1[q].getSuit());
 			}
 			discardPos++;
 			deckPos++;
@@ -249,7 +266,6 @@ public class Run {
 				choice = in.nextInt();
 				System.out.println("You picked "+player1[choice-1].getValue()+" of "+player1[choice-1].getSuit());
 				Card discardTemp = player1[choice-1];
-				Card flusterCheck = player1[choice-1];
 				player1[choice-1]=tempCard;
 				discard[discardPos+1]=discardTemp;
 			}
