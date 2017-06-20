@@ -298,6 +298,20 @@ public class Run {
 						discard[discardPos] = tempCard;
 					}
 				}
+				if (flusterDeck[x].getType() == "Royal Fluster")
+				{
+					System.out.println("Okay each bot will take one card and give you one");
+					if (numP==1)
+					{
+						tempCard = player1[0];
+						player1[0] = player2[0];
+						player2[0] = tempCard;
+					}
+					else if (numP==2)
+					{
+						
+					}
+				}
 				x++;
 				deckPos++;
 			}
